@@ -6,18 +6,45 @@
 <body>
 	<script>
 		function create_file(from_,to_){
-			console.log(from_);
-			console.log(to_);
 			var width,height,viewBox;
 			var element_id;
 			var svg_from=$(from_).find('svg');
 			var svg_to=$(to_).find('svg');
-			width=svg_from.prop('width').baseVal.value;
-			height=svg_from.prop('height').baseVal.value;
+			width=svg_to.prop('width').baseVal.value;
+			height=svg_to.prop('height').baseVal.value;
 			viewBox=svg_to.prop('viewBox').baseVal.x+' '+svg_to.prop('viewBox').baseVal.y+' '+svg_to.prop('viewBox').baseVal.width+' '+svg_to.prop('viewBox').baseVal.height;
-			var animate_object=svg_from.find('*[id]');
-			console.log(animate_object);
-			
+			var animate_object_from=svg_from.find('*[id]');
+			var animate_object_to=svg_to.find('*[id]');
+			var animate_mass=[];
+			if(animate_object_from.attr('cx')!=animate_object_to.attr('cx')){
+				element_id=animate_object_from[0].id;
+				animate_mass[animate_mass.length]=' <animate xlink:href="#'+element_id+'" attributeName="cx" from="'+animate_object_from.attr('cx')+'" to="'+animate_object_to.attr('cx')+'" dur="5s" begin="0s" fill="freeze"/>';
+			}
+			if(animate_object_from.attr('cy')!=animate_object_to.attr('cy')){
+				element_id=animate_object_from[0].id;
+				animate_mass[animate_mass.length]=' <animate xlink:href="#'+element_id+'" attributeName="cy" from="'+animate_object_from.attr('cy')+'" to="'+animate_object_to.attr('cy')+'" dur="5s" begin="0s" fill="freeze"/>';
+			}
+			if(animate_object_from.attr('r')!=animate_object_to.attr('r')){
+				element_id=animate_object_from[0].id;
+				animate_mass[animate_mass.length]=' <animate xlink:href="#'+element_id+'" attributeName="r" from="'+animate_object_from.attr('r')+'" to="'+animate_object_to.attr('r')+'" dur="5s" begin="0s" fill="freeze"/>';
+			}
+			if(animate_object_from.attr('d')!=animate_object_to.attr('d')){
+				element_id=animate_object_from[0].id;
+				animate_mass[animate_mass.length]=' <animate xlink:href="#'+element_id+'" attributeName="d" from="'+animate_object_from.attr('d')+'" to="'+animate_object_to.attr('d')+'" dur="5s" begin="0s" fill="freeze"/>';
+			}
+			if(animate_object_from.attr('transform')!=animate_object_to.attr('transform')){
+				element_id=animate_object_from[0].id;
+				animate_mass[animate_mass.length]=' <animate xlink:href="#'+element_id+'" attributeName="transform" from="'+animate_object_from.attr('transform')+'" to="'+animate_object_to.attr('transform')+'" dur="5s" begin="0s" fill="freeze"/>';
+			}
+			if(animate_mass.length>0){
+				var svg_text='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="'+width+'" height="'+height+'" viewBox="'+viewBox+'">';
+				svg_text+=animate_object_from[0].outerHTML;
+				for(var i=0;i<animate_mass.length;i++){
+					svg_text+=animate_mass[i];
+				}
+				svg_text+='</svg>';
+				console.log(svg_text);
+			}
 		}
 		function convert(){			
 			from.forEach(function(file,key){
@@ -51,7 +78,6 @@
 			url:'./to',async:false,
 			success:function(data){$(data).find('a:contains('+fileextension+')').each(function(){to[to.length]=this.href;})}
 		});
-		
 		convert();
 	</script>
 	
