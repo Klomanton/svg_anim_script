@@ -1,0 +1,59 @@
+<html>
+<head>
+	<title>SVG-Animate script</title>
+	<script type="text/javascript" src="./jquery.js"></script>
+</head>
+<body>
+	<script>
+		function create_file(from_,to_){
+			console.log(from_);
+			console.log(to_);
+			var width,height,viewBox;
+			var element_id;
+			var svg_from=$(from_).find('svg');
+			var svg_to=$(to_).find('svg');
+			width=svg_from.prop('width').baseVal.value;
+			height=svg_from.prop('height').baseVal.value;
+			viewBox=svg_to.prop('viewBox').baseVal.x+' '+svg_to.prop('viewBox').baseVal.y+' '+svg_to.prop('viewBox').baseVal.width+' '+svg_to.prop('viewBox').baseVal.height;
+			var animate_object=svg_from.find('*[id]');
+			console.log(animate_object);
+			
+		}
+		function convert(){			
+			from.forEach(function(file,key){
+				var from_file='';
+				var to_file='';
+				$.ajax({
+					url:file,
+					async:false,
+					success:function(data){
+						from_file=data;
+					}
+				})
+				$.ajax({
+					url:to[key],
+					async:false,
+					success:function(data){
+						to_file=data;
+					}
+				})
+				create_file(from_file,to_file);
+			})
+		}
+	</script>
+	<script>
+		var fileextension='.svg',from=[],to=[];
+		$.ajax({
+			url:'./from',async:false,
+			success:function(data){$(data).find('a:contains('+fileextension+')').each(function(){from[from.length]=this.href;})}
+		});
+		$.ajax({
+			url:'./to',async:false,
+			success:function(data){$(data).find('a:contains('+fileextension+')').each(function(){to[to.length]=this.href;})}
+		});
+		
+		convert();
+	</script>
+	
+</body>
+</html>
