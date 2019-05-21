@@ -5,14 +5,14 @@
 </head>
 <body>
 	<script>
-		function create_file(from_,to_){
+		function create_file(from_,to_,file){
 			var width,height,viewBox;
 			var element_id;
 			var svg_from=$(from_).find('svg');
 			var svg_to=$(to_).find('svg');
-			width=svg_to.prop('width').baseVal.value;
-			height=svg_to.prop('height').baseVal.value;
-			viewBox=svg_to.prop('viewBox').baseVal.x+' '+svg_to.prop('viewBox').baseVal.y+' '+svg_to.prop('viewBox').baseVal.width+' '+svg_to.prop('viewBox').baseVal.height;
+			width=svg_to.prop('width').baseVal.valueAsString;
+			height=svg_to.prop('height').baseVal.valueAsString;
+			viewBox=svg_to.prop('viewBox').baseVal.x+' '+svg_to.prop('viewBox').baseVal.y+' '+width+' '+height;
 			var animate_object_from=svg_from.find('*[id]');
 			var animate_object_to=svg_to.find('*[id]');
 			var animate_mass=[];
@@ -43,7 +43,9 @@
 					svg_text+=animate_mass[i];
 				}
 				svg_text+='</svg>';
+				console.log(file.replace('http://127.0.0.1:5500/from/',''));
 				console.log(svg_text);
+
 			}
 		}
 		function convert(){			
@@ -64,7 +66,7 @@
 						to_file=data;
 					}
 				})
-				create_file(from_file,to_file);
+				create_file(from_file,to_file,file);
 			})
 		}
 	</script>
